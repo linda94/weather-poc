@@ -8,6 +8,7 @@ import Home from './pages/Home';
 function App() {
   return (
     <div className="App">
+      <TopBar />
       <main>
         <Routes>
           <Route index element={<Home />} />
