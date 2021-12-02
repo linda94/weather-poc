@@ -1,6 +1,4 @@
 main {
-  min-height: calc(100vh - 64px); /* 64px is mui default Appbar height */
+  height: calc(100vh - 64px); /* 64px is mui default Appbar height */
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
