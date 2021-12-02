@@ -10,6 +10,9 @@ const TopBar = () => {
         <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
           Weather
         </Typography>
+        <Link to="/" className={styles.home}>
+          <Button color="inherit">Home</Button>
+        </Link>
         <Link to="about" className={styles.about}>
           <Button color="inherit">About</Button>
         </Link>
