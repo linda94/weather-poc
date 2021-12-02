@@ -1,4 +1,4 @@
-import { Accordion, AccordionSummary } from '@mui/material';
+import { Accordion, AccordionSummary, Skeleton } from '@mui/material';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
@@ -12,11 +12,40 @@ import {
   ForecastContainer,
   StyledAccordionDetails,
 } from './styledComponents';
+import Repeat from '../../components/Repeat';
+
+const ForecastSkeleton = () => (
+  <Repeat times={3}>
+    <Accordion defaultExpanded>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <DayTypography>
+          <Skeleton animation="wave" width="50%" />
+        </DayTypography>
+      </AccordionSummary>
+
+      <StyledAccordionDetails>
+        <Repeat times={6}>
+          <DayDetails>
+            <div className="time">
+              <Skeleton animation="wave" width="100%" />
+            </div>
+            <div className="temperature">
+              <Skeleton animation="wave" width="100%" />
+            </div>
+            <div className="wind">
+              <Skeleton animation="wave" width="100%" />
+            </div>
+          </DayDetails>
+        </Repeat>
+      </StyledAccordionDetails>
+    </Accordion>
+  </Repeat>
+);
 
 const Forecast = () => {
   const { lat, lon } = useParams();
-  const { data } = useSWR(
-    `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${lat}&lon=${lon}`,
+  const { data, isValidating } = useSWR(
+    `https://api.met.no/weatherapi/locationforecast/2.0/compact?lon=${lon}&lat=${lat}`,
   );
 
   const sortedDays = useMemo(() => {
@@ -38,6 +67,8 @@ const Forecast = () => {
 
   return (
     <ForecastContainer>
+      {!data && isValidating && <ForecastSkeleton />}
+
       {sortedDays &&
         Object.keys(sortedDays).length > 0 &&
         Object.entries(sortedDays).map(([day, value]) => (
@@ -48,7 +79,7 @@ const Forecast = () => {
 
             <StyledAccordionDetails>
               {value.map((timeEntry: any) => (
-                <DayDetails>
+                <DayDetails key={timeEntry.time}>
                   <div className="time">
                     <AccessTimeOutlinedIcon />
                     {new Date(timeEntry.time).toLocaleString(undefined, {

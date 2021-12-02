@@ -20,7 +20,7 @@ function App() {
         <main>
           <Routes>
             <Route index element={<Home />} />
-            <Route path="/forecast/:lat/:lon" element={<Forecast />} />
+            <Route path="/forecast/:lon/:lat" element={<Forecast />} />
             <Route path="about" element={<About />} />
           </Routes>
         </main>

@@ -10,6 +10,7 @@ import {
 
 const DayTypography = styled(Typography)<TypographyProps>({
   textTransform: 'capitalize',
+  width: '100%',
 });
 
 const DayDetails = styled(Card)<CardProps>({
