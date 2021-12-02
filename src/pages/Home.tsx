@@ -8,10 +8,9 @@ import useDebounce from '../hooks/useDebounce';
 
 const StyledContainer = styled('div')({
   flexDirection: 'column',
-  padding: '1rem 1rem 0 1rem',
+  padding: '1rem',
   flex: 1,
   display: 'flex',
-  alignItems: 'center',
 });
 
 const StyledAutocomplete = styled(Autocomplete)({
@@ -52,6 +51,7 @@ const Homepage = () => {
       <Typography variant="overline" display="block" gutterBottom>
         Search for any city in Norway
       </Typography>
+
       <StyledAutocomplete
         options={options}
         filterOptions={(x) => x}
