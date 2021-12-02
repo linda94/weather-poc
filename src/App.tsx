@@ -4,6 +4,7 @@ import { SWRConfig } from 'swr';
 import './App.css';
 import TopBar from './components/TopBar';
 import About from './pages/About/About';
+import Forecast from './pages/Forecast';
 import Home from './pages/Home';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <main>
           <Routes>
             <Route index element={<Home />} />
+            <Route path="/forecast/:lat/:lon" element={<Forecast />} />
             <Route path="about" element={<About />} />
           </Routes>
         </main>
