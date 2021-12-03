@@ -1,4 +1,9 @@
-import { Accordion, AccordionSummary, Skeleton } from '@mui/material';
+import {
+  Accordion,
+  AccordionSummary,
+  Skeleton,
+  Typography,
+} from '@mui/material';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
@@ -13,6 +18,7 @@ import {
   StyledAccordionDetails,
 } from './styledComponents';
 import Repeat from '../../components/Repeat';
+import { useSearchContext } from '../../hooks/useSearchContext';
 
 const ForecastSkeleton = () => (
   <Repeat times={3}>
@@ -44,8 +50,13 @@ const ForecastSkeleton = () => (
 
 const Forecast = () => {
   const { lat, lon } = useParams();
+  const { displayName } = useSearchContext();
   const { data, isValidating } = useSWR(
     `https://api.met.no/weatherapi/locationforecast/2.0/compact?lon=${lon}&lat=${lat}`,
+  );
+
+  const { data: reverseData } = useSWR(
+    `https://nominatim.openstreetmap.org/reverse?lon=${lon}&lat=${lat}&format=json`,
   );
 
   const sortedDays = useMemo(() => {
@@ -69,36 +80,44 @@ const Forecast = () => {
     <ForecastContainer>
       {!data && isValidating && <ForecastSkeleton />}
 
-      {sortedDays &&
-        Object.keys(sortedDays).length > 0 &&
-        Object.entries(sortedDays).map(([day, value]) => (
-          <Accordion defaultExpanded key={day}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <DayTypography>{day}</DayTypography>
-            </AccordionSummary>
+      {sortedDays && Object.keys(sortedDays).length > 0 && (
+        <>
+          <Typography variant="overline" display="block" gutterBottom>
+            Showing forecast for: {displayName || reverseData?.address.town}
+          </Typography>
 
-            <StyledAccordionDetails>
-              {value.map((timeEntry: any) => (
-                <DayDetails key={timeEntry.time}>
-                  <div className="time">
-                    <AccessTimeOutlinedIcon />
-                    {new Date(timeEntry.time).toLocaleString(undefined, {
-                      hour: '2-digit',
-                    })}
-                  </div>
-                  <div className="temperature">
-                    {Math.round(timeEntry.data.instant.details.air_temperature)}
-                    &#8451;
-                  </div>
-                  <div className="wind">
-                    <AirOutlinedIcon />
-                    {Math.round(timeEntry.data.instant.details.wind_speed)}
-                  </div>
-                </DayDetails>
-              ))}
-            </StyledAccordionDetails>
-          </Accordion>
-        ))}
+          {Object.entries(sortedDays).map(([day, value]) => (
+            <Accordion defaultExpanded key={day}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <DayTypography>{day}</DayTypography>
+              </AccordionSummary>
+
+              <StyledAccordionDetails>
+                {value.map((timeEntry: any) => (
+                  <DayDetails key={timeEntry.time}>
+                    <div className="time">
+                      <AccessTimeOutlinedIcon />
+                      {new Date(timeEntry.time).toLocaleString(undefined, {
+                        hour: '2-digit',
+                      })}
+                    </div>
+                    <div className="temperature">
+                      {Math.round(
+                        timeEntry.data.instant.details.air_temperature,
+                      )}
+                      &#8451;
+                    </div>
+                    <div className="wind">
+                      <AirOutlinedIcon />
+                      {Math.round(timeEntry.data.instant.details.wind_speed)}
+                    </div>
+                  </DayDetails>
+                ))}
+              </StyledAccordionDetails>
+            </Accordion>
+          ))}
+        </>
+      )}
     </ForecastContainer>
   );
 };

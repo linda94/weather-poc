@@ -1,8 +1,7 @@
-import { Autocomplete, TextField, Typography } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { useState, useMemo } from 'react';
 import useSWR from 'swr';
 import { useNavigate } from 'react-router-dom';
-import styled from '@emotion/styled';
 
 import useDebounce from '../hooks/useDebounce';
 import { useSearchContext } from '../hooks/useSearchContext';
@@ -16,6 +15,7 @@ const Homepage = () => {
   let navigate = useNavigate();
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 300);
+  const { setDisplayName } = useSearchContext();
 
   const { data, isValidating } = useSWR(() =>
     debouncedSearch
@@ -45,6 +45,7 @@ const Homepage = () => {
         onChange={(_, option: any) => {
           const longitude = parseFloat(option.value.lon).toFixed(4);
           const latitude = parseFloat(option.value.lat).toFixed(4);
+          setDisplayName(option.label);
           navigate(`/forecast/${longitude}/${latitude}`);
         }}
         renderOption={(props, option: any) => (
