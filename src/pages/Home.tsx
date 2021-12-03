@@ -5,26 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import useDebounce from '../hooks/useDebounce';
-
-const StyledContainer = styled('div')({
-  flexDirection: 'column',
-  padding: '1rem',
-  flex: 1,
-  display: 'flex',
-});
-
-const StyledAutocomplete = styled(Autocomplete)({
-  width: '100%',
-});
-
-const StyledOption = styled('li')({
-  '&&': {
-    flexDirection: 'column',
-    textTransform: 'capitalize',
-    width: '100%',
-    alignItems: 'flex-start',
-  },
-});
+import { useSearchContext } from '../hooks/useSearchContext';
+import {
+  StyledContainer,
+  StyledAutocomplete,
+  StyledOption,
+} from './styledComponents';
 
 const Homepage = () => {
   let navigate = useNavigate();

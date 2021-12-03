@@ -1,7 +1,11 @@
+import styled from '@emotion/styled';
 import { AppBar, Button, Toolbar, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 
-import styles from './topbar.module.css';
+const StyledLink = styled(Link)<LinkProps>({
+  textDecoration: 'initial',
+  color: 'inherit',
+});
 
 const TopBar = () => {
   return (
@@ -10,12 +14,12 @@ const TopBar = () => {
         <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>
           Weather
         </Typography>
-        <Link to="/" className={styles.home}>
+        <StyledLink to="/">
           <Button color="inherit">Home</Button>
-        </Link>
-        <Link to="about" className={styles.about}>
+        </StyledLink>
+        <StyledLink to="about">
           <Button color="inherit">About</Button>
-        </Link>
+        </StyledLink>
       </Toolbar>
     </AppBar>
   );
